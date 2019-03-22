@@ -1,21 +1,28 @@
 from flask import *
-app = Flask(__name__)
+from flask_sqlalchemy import SQLAlchemy
 
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+db = SQLAlchemy(app)
+db.session.echo = True
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+from models import Note
+
+db.create_all()
+db.session.commit()
 
 
 @app.route('/')
 def index():
-    return render_template('index.html', notes=session['notes'])
+    return render_template('index.html', notes=Note.query.all())
 
 
 @app.route('/post', methods=['POST', 'GET'])
 def post():
     if request.method == 'POST':
-        if session.get('notes') is None:
-            session['notes'] = []
-        session['notes'].append((request.form['title'], request.form['note']))
-        session.modified = True
+        note = Note(title=request.form['title'], body=request.form['note'])
+        db.session.add(note)
+        db.session.commit()
         return redirect(url_for('index'))
     return render_template('post.html')
 

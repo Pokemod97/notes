@@ -3,13 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
+
 {% if notes %}
     {% for note in notes %}
-        <h1> {{ note[0] }} </h1>
-        <br>
-        <p>{{ note[1] }}</p>
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <h1 class="display-4">{{ note.title }}</h1>
+                <p class="lead">{{ note.body }}</p>
+            </div>
+        </div>
     {% endfor %}
 {% endif %}
 </body>
